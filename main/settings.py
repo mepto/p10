@@ -27,6 +27,7 @@ try:
     with (BASE_DIR / 'main' / '.softdesk.secret').open() as f:
         SECRETS = json.load(f)
     SECRET_KEY = SECRETS['SECRET_KEY']
+    DB_PWD = SECRETS['DB_PWD']
 except FileNotFoundError:
     print('DJANGO SECRET FILE ERROR: Missing .softdesk.secret file! \nAdd a ".softdesk.secret" file with a Django '
           'secret key next to settings.py file. See readme.md for more information.')
@@ -104,8 +105,11 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'softdesk_db',
+        'USER': 'softdesk_user',
+        'PASSWORD': DB_PWD,
+        'HOST': 'localhost',
     }
 }
 

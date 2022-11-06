@@ -58,7 +58,7 @@ Install postgresql on your windows machine if it is not already by going to
 https://www.postgresql.org/download/windows/ and using the installer, selecting 
 the version relevant to your environment.
 
-On Windows, once the installation is done, open the sqk shell from the 
+On Windows, once the installation is done, open the sql shell from the 
 windows menu. Leave the defaults until the password where you should input 
 the one you provided during the installation.
 
@@ -71,9 +71,8 @@ Then create a database:
 
 `CREATE DATABASE softdesk_db;`
 
-Give rights to user to that DB:
-
-`GRANT ALL PRIVILEGES ON DATABASE softdesk_db to softdesk_user;`
+Ensure user is owner of the database:
+`ALTER DATABASE softdesk_db OWNER TO softdesk_user;`
 
 ### Migrations
 
