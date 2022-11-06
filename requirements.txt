@@ -1,0 +1,14 @@
+django==4.1.2
+djangorestframework==3.14.0
+
+# vendors
+rules==3.3.0
+
+# ci
+pre-commit==2.17.0
+flake8==4.0.1
+pylint==2.11.1
+pylint-django==2.4.4
+coverage==6.1.1
+gitlint==0.16.0
+interrogate==1.5.0
