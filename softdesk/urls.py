@@ -1,12 +1,11 @@
 """SoftDesk URL Configuration."""
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 from rest_framework_nested.routers import NestedSimpleRouter
 
 from softdesk.views.comment import CommentViewSet
 from softdesk.views.issue import IssueViewSet
 from softdesk.views.project import ProjectViewSet
-
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'projects', ProjectViewSet, basename='project')

@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from softdesk.models import Comment, Issue
+from softdesk.models import Comment
 from softdesk.serializers import CommentSerializer
 
 

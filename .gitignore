@@ -4,5 +4,6 @@
 /static/
 /media/
 /node_modules/
+/models/__init__.py
 
 *.secret

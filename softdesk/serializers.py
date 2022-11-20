@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from softdesk.models import Comment
-from softdesk.models.project import Project
 from softdesk.models.issue import Issue
+from softdesk.models.project import Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
