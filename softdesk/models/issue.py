@@ -20,5 +20,3 @@ class Issue(models.Model):
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='issue_creator')
     modified = models.DateTimeField()
     modified_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='issue_modifier')
-
-

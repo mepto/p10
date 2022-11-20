@@ -1,6 +1,7 @@
 """SoftDesk URL Configuration."""
 from rest_framework_nested.routers import NestedSimpleRouter
 
+from softdesk.views.comment import CommentViewSet
 from softdesk.views.issue import IssueViewSet
 from softdesk.views.project import ProjectViewSet
 
@@ -13,9 +14,13 @@ router.register(r'projects', ProjectViewSet, basename='project')
 projects_router = NestedSimpleRouter(router, r'projects', lookup='project')
 projects_router.register(r'issues', IssueViewSet, basename='issues')
 
+issues_router = NestedSimpleRouter(projects_router, r'issues', lookup='issue')
+issues_router.register(r'comments', CommentViewSet, basename='comments')
+
 urlpatterns = [
     path('', include(router.urls)),
     path('', include(projects_router.urls)),
+    path('', include(issues_router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 

@@ -19,8 +19,9 @@ class IssueViewSet(ModelViewSet):
         serializer.initial_data['created_by'] = serializer.initial_data['author_user_id']
         serializer.initial_data['modified'] = now()
         serializer.initial_data['modified_by'] = serializer.initial_data['author_user_id']
-
-        if not 'assignee_user_id' in serializer.initial_data:
+        if 'project_id' not in serializer.initial_data:
+            serializer.initial_data['project_id'] = self.kwargs['project_pk']
+        if 'assignee_user_id' not in serializer.initial_data:
             serializer.initial_data['assignee_user_id'] = serializer.initial_data['author_user_id']
 
         serializer.is_valid(raise_exception=True)
