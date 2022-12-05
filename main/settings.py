@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 
     # vendors
     'rest_framework',
+    'rest_framework_simplejwt',
     'rules.apps.AutodiscoverRulesConfig',
 ]
 
@@ -80,6 +81,7 @@ LOGOUT_REDIRECT_URL = 'home'
 AUTHENTICATION_BACKENDS = (
     'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
 )
 
 TEMPLATES = [
