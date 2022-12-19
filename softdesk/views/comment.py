@@ -17,8 +17,8 @@ class CommentViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.initial_data['created'] = now()
         serializer.initial_data['modified'] = now()
-        if 'issue_id' not in serializer.initial_data:
-            serializer.initial_data['issue_id'] = self.kwargs['issue_pk']
+        if 'issue' not in serializer.initial_data:
+            serializer.initial_data['issue'] = self.kwargs['issue_pk']
 
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

@@ -9,4 +9,4 @@ class Project(models.Model):
     title = models.CharField(max_length=180)
     description = models.TextField()
     project_type = models.CharField(choices=PROJECT_TYPE, max_length=100)
-    author_user_id = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='project_author')
+    author_user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='project_author')

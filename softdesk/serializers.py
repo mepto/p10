@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import ChoiceField
 
+from softdesk.constants import CONTRIBUTOR_ROLE
 from softdesk.models import Comment, User
+from softdesk.models.contributor import Contributor
 from softdesk.models.issue import Issue
 from softdesk.models.project import Project
 
@@ -11,7 +14,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id', 'title', 'description', 'project_type', 'author_user_id']
+        fields = ['id', 'title', 'description', 'project_type', 'author_user']
 
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -19,8 +22,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ['id', 'title', 'description', 'assignee_user_id', 'author_user_id', 'priority', 'status', 'tag',
-                  'project_id', 'created', 'created_by', 'modified', 'modified_by']
+        fields = ['id', 'title', 'description', 'assignee_user', 'author_user', 'priority', 'status', 'tag',
+                  'project', 'created', 'created_by', 'modified', 'modified_by']
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -28,7 +31,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'description', 'author_user_id', 'issue_id', 'created', 'modified']
+        fields = ['id', 'description', 'author_user', 'issue', 'created', 'modified']
+
+
+class ContributorSerializer(serializers.ModelSerializer):
+    """Serialize Contributor model."""
+    role = ChoiceField(choices=CONTRIBUTOR_ROLE)
+
+    class Meta:
+        model = Contributor
+        fields = ['id', 'user', 'project', 'role']
 
 
 class UserSerializer(serializers.ModelSerializer):

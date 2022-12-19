@@ -24,3 +24,8 @@ ISSUE_PRIORITY = (
     ('medium', 'Medium'),
     ('high', 'High')
 )
+
+CONTRIBUTOR_ROLE = (
+    ('manager', 'Manager'),
+    ('contributor', 'Contributor')
+)

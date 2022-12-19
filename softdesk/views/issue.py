@@ -16,13 +16,13 @@ class IssueViewSet(ModelViewSet):
         """Add creation date and user to new issue."""
         serializer = self.get_serializer(data=request.data)
         serializer.initial_data['created'] = now()
-        serializer.initial_data['created_by'] = serializer.initial_data['author_user_id']
+        serializer.initial_data['created_by'] = serializer.initial_data['author_user']
         serializer.initial_data['modified'] = now()
-        serializer.initial_data['modified_by'] = serializer.initial_data['author_user_id']
-        if 'project_id' not in serializer.initial_data:
-            serializer.initial_data['project_id'] = self.kwargs['project_pk']
-        if 'assignee_user_id' not in serializer.initial_data:
-            serializer.initial_data['assignee_user_id'] = serializer.initial_data['author_user_id']
+        serializer.initial_data['modified_by'] = serializer.initial_data['author_user']
+        if 'project' not in serializer.initial_data:
+            serializer.initial_data['project'] = self.kwargs['project_pk']
+        if 'assignee_user' not in serializer.initial_data:
+            serializer.initial_data['assignee_user'] = serializer.initial_data['author_user']
 
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
