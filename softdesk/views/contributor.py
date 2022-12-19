@@ -1,12 +1,12 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from softdesk.models.contributor import Contributor
 from softdesk.serializers import ContributorSerializer
+from softdesk.views.common import SoftDeskView
 
 
-class ContributorViewSet(ModelViewSet):
+class ContributorViewSet(SoftDeskView):
     """View for contributor."""
     queryset = Contributor.objects.all()
     serializer_class = ContributorSerializer

@@ -1,9 +1,12 @@
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from softdesk.serializers import UserSerializer
+# l'api n'accepte que des access tokens
+# quand dépassé, envoyer un invalide
+# refresh token requête séparée
+from softdesk.views.common import SoftDeskView
 
 # bloquer endpoint;
 # class CreateListRetrieveViewSet(mixins.CreateModelMixin,
@@ -20,13 +23,8 @@ from softdesk.serializers import UserSerializer
 
 # si refresh token toujours valide mais pas access token, alors un nouveau access token est créé
 
-# l'api n'accepte que des access tokens
-# quand dépassé, envoyer un invalide
-# refresh token requête séparée
-# demander sur workplace si il faut faire le refresh token
 
-
-class UserViewSet(ModelViewSet):
+class UserViewSet(SoftDeskView):
     """View for Users."""
     serializer_class = UserSerializer
 

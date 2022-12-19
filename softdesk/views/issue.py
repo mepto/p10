@@ -1,13 +1,13 @@
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from softdesk.models import Issue
 from softdesk.serializers import IssueSerializer
+from softdesk.views.common import SoftDeskView
 
 
-class IssueViewSet(ModelViewSet):
+class IssueViewSet(SoftDeskView):
     """View for Issues."""
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer

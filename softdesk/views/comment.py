@@ -1,13 +1,13 @@
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from softdesk.models import Comment
 from softdesk.serializers import CommentSerializer
+from softdesk.views.common import SoftDeskView
 
 
-class CommentViewSet(ModelViewSet):
+class CommentViewSet(SoftDeskView):
     """View for Issues."""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
