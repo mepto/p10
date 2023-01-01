@@ -12,6 +12,20 @@ class IssueViewSet(SoftDeskView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
+    def list(self, request, *args, **kwargs):
+        """List project's issues."""
+        queryset = self.filter_queryset(self.get_queryset())
+        # Add project pk to filter issues displayed
+        if 'project_pk' in kwargs:
+            queryset = queryset.filter(project_id=kwargs['project_pk'])
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request, *args, **kwargs):
         """Add creation date and user to new issue."""
         serializer = self.get_serializer(data=request.data)
