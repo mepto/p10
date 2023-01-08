@@ -29,3 +29,6 @@ class ProjectViewSet(ModelViewSet):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+# TODO: Fix issue with project update and delete on unexisting project
+# TODO: Remove author_user from body in issues and comments requests
