@@ -1,16 +1,19 @@
 from django.utils.timezone import now
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from softdesk.models import Comment
+from softdesk.permissions import IsContributor, IsItemCreatorOrReadOnly
 from softdesk.serializers import CommentSerializer
-from softdesk.views.common import SoftDeskView
 
 
-class CommentViewSet(SoftDeskView):
+class CommentViewSet(ModelViewSet):
     """View for Issues."""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated, IsContributor, IsItemCreatorOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         """List project's comments."""

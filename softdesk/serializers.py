@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import ChoiceField
@@ -41,6 +42,12 @@ class ContributorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contributor
         fields = ['id', 'user', 'project', 'role']
+
+    def create(self, validated_data):
+        try:
+            return super().create(validated_data)
+        except IntegrityError as error:
+            raise ValidationError('Cannot comply: duplicate input attempt') from error
 
 
 class UserSerializer(serializers.ModelSerializer):

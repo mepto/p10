@@ -1,16 +1,19 @@
 from django.utils.timezone import now
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from softdesk.models import Issue
+from softdesk.permissions import IsContributor, IsItemCreatorOrReadOnly
 from softdesk.serializers import IssueSerializer
-from softdesk.views.common import SoftDeskView
 
 
-class IssueViewSet(SoftDeskView):
+class IssueViewSet(ModelViewSet):
     """View for Issues."""
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
+    permission_classes = (IsAuthenticated, IsContributor, IsItemCreatorOrReadOnly,)
 
     def list(self, request, *args, **kwargs):
         """List project's issues."""
