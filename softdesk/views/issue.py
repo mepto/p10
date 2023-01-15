@@ -52,7 +52,6 @@ class IssueViewSet(ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.initial_data['modified'] = now()
-        # TODO update modified by field after authentication
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
