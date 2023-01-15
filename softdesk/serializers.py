@@ -24,7 +24,7 @@ class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = ['id', 'title', 'description', 'assignee_user', 'author_user', 'priority', 'status', 'tag',
-                  'project', 'created', 'created_by', 'modified', 'modified_by']
+                  'project', 'created', 'modified']
 
 
 class CommentSerializer(serializers.ModelSerializer):

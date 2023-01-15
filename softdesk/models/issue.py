@@ -17,6 +17,4 @@ class Issue(models.Model):
     tag = models.CharField(choices=ISSUE_TYPE, max_length=20)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='issue_project')
     created = models.DateTimeField()
-    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='issue_creator')
     modified = models.DateTimeField()
-    modified_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='issue_modifier')
