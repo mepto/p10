@@ -32,6 +32,7 @@ class CommentViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         """Add creation date and user to new issue."""
         serializer = self.get_serializer(data=request.data)
+        serializer.initial_data['author_user'] = request.user.id
         serializer.initial_data['created'] = now()
         serializer.initial_data['modified'] = now()
         if 'issue' not in serializer.initial_data:
