@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from rest_framework.generics import get_object_or_404
 
 from softdesk.models import Project
 from softdesk.models.contributor import Contributor
@@ -8,8 +9,8 @@ class IsContributor(permissions.BasePermission):
     """Check that the user is a project contributor."""
 
     def has_permission(self, request, view):
-        if 'project_pk' in view.kwargs and request.user in Project.objects.get(
-                pk=view.kwargs['project_pk']).contributor_users.all():
+        project = get_object_or_404(Project, pk=view.kwargs['project_pk'])
+        if 'project_pk' in view.kwargs and request.user in project.contributor_users.all():
             return True
         return False
 
