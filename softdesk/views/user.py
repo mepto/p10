@@ -1,12 +1,13 @@
 from django.utils.timezone import now
-from rest_framework import status
+from rest_framework import mixins, status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from softdesk.serializers import UserSerializer
 
 
-class UserViewSet(ModelViewSet):
+class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
+                  mixins.ListModelMixin, GenericViewSet):
     """View for Users."""
     serializer_class = UserSerializer
 
