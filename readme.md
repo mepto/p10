@@ -37,8 +37,9 @@ Create and activate your virtual environment. The methodology below uses the ven
 
 ### Secret key
 
-Create a .softdesk.secret file in the main folder and add a json 
-dictionary with the SECRET_KEY item for Django.
+Create a `.softdesk.secret` file in the main folder and add a json 
+dictionary with the `SECRET_KEY` item and the for Django and the `DB_PWD` 
+item for the database.
 
 ### Requirements
 
@@ -52,7 +53,7 @@ If you need to upgrade pip, type in the following command:
 
 ### Database
 
-The database is a posstgresql database. 
+The database is a postgresql database. 
 You will need to create one on your local machine. 
 Install postgresql on your windows machine if it is not already by going to 
 https://www.postgresql.org/download/windows/ and using the installer, selecting 
