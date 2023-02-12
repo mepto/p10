@@ -37,9 +37,10 @@ Create and activate your virtual environment. The methodology below uses the ven
 
 ### Secret key
 
-Create a `.softdesk.secret` file in the main folder and add a json 
-dictionary with the `SECRET_KEY` item and the for Django and the `DB_PWD` 
-item for the database.
+Create a `.softdesk.secret` file in the `main` folder and add a json 
+dictionary with: 
+- the `SECRET_KEY` item for Django and 
+- the `DB_PWD` item for the database.
 
 ### Requirements
 

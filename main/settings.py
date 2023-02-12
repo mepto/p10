@@ -33,6 +33,9 @@ except FileNotFoundError:
     print('DJANGO SECRET FILE ERROR: Missing .softdesk.secret file! \nAdd a ".softdesk.secret" file with a Django '
           'secret key next to settings.py file. See readme.md for more information.')
     quit()
+except KeyError:
+    print('DJANGO SECRET FILE ERROR: Missing key in secreet file! \nThe .softdesk.secret file must contain a '
+          'SECRET_KEY for Django and a DB_PWD for the database.')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
