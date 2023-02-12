@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from softdesk.models import Comment
-from softdesk.permissions import IsContributor, IsItemCreatorOrReadOnly
+from softdesk.permissions import CanCreateIssueOrComment, IsItemCreatorOrReadOnly
 from softdesk.serializers import CommentSerializer
 
 
@@ -13,48 +13,24 @@ class CommentViewSet(ModelViewSet):
     """View for Issues."""
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated, IsContributor, IsItemCreatorOrReadOnly]
+    permission_classes = (IsAuthenticated, CanCreateIssueOrComment, IsItemCreatorOrReadOnly)
 
-    def list(self, request, *args, **kwargs):
-        """List project's comments."""
-        queryset = self.filter_queryset(self.get_queryset())
-        # Add issue pk to filter comments displayed
-        if 'issue_pk' in kwargs:
-            queryset = queryset.filter(issue_id=kwargs['issue_pk'])
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+    def get_queryset(self):
+        """Filter queryset with specific project."""
+        queryset = super().get_queryset()
+        if 'issue_pk' in self.kwargs:
+            queryset = queryset.filter(project_id=self.kwargs['issue_pk'])
+        return queryset
 
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request, *args, **kwargs):
+    def perform_create(self, serializer):
         """Add creation date and user to new issue."""
-        serializer = self.get_serializer(data=request.data)
-        serializer.initial_data['author_user'] = request.user.id
-        serializer.initial_data['created'] = now()
-        serializer.initial_data['modified'] = now()
-        if 'issue' not in serializer.initial_data:
-            serializer.initial_data['issue'] = self.kwargs['issue_pk']
+        serializer.validated_data['author_user'] = self.request.user
+        serializer.validated_data['created'] = now()
+        serializer.validated_data['modified'] = now()
+        serializer.validated_data['issue_id'] = self.kwargs['issue_pk']
+        serializer.save()
 
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def update(self, request, *args, **kwargs):
-        """Change modified data to comment on update."""
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.initial_data['modified'] = now()
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
+    def perform_update(self, serializer):
+        """Change modified field on item update."""
+        serializer.validated_data['modified'] = now()
+        serializer.save()

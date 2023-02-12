@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from softdesk.constants import CONTRIBUTOR_ROLE
+from softdesk.constants import CONTRIBUTOR_ROLE, MANAGER
 from softdesk.models import Project
 from softdesk.models.contributor import Contributor
 from softdesk.permissions import IsProjectManagerOrReadOnly
@@ -14,21 +14,15 @@ class ProjectViewSet(ModelViewSet):
     """View for projects."""
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = (IsAuthenticated, IsProjectManagerOrReadOnly,)
+    permission_classes = (IsAuthenticated, IsProjectManagerOrReadOnly)
 
-    def create(self, request, *args, **kwargs):
-        """Add a new project."""
-        self.permission_classes = [IsAuthenticated]
-        serializer = self.get_serializer(data=request.data)
-        serializer.initial_data['author_user'] = request.user.id
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        Contributor.objects.create(role=CONTRIBUTOR_ROLE[0][0],
-                                   project_id=serializer.data['id'],
-                                   user_id=request.user.id)
+    def __str__(self):
+        return 'ProjectViewSet'
 
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-# TODO: Fix issue with project update and delete on unexisting project
-# TODO: Remove author_user from body in issues and comments requests
+    def perform_create(self, serializer):
+        """Populate author_user information before save."""
+        serializer.validated_data['author_user'] = self.request.user
+        project = serializer.save()
+        Contributor.objects.create(role=MANAGER,
+                                   project_id=project.id,
+                                   user_id=int(self.request.user.id))

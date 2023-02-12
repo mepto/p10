@@ -1,19 +1,16 @@
 from rest_framework import permissions
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
 from softdesk.models import Project
 from softdesk.models.contributor import Contributor
 
 
-class IsContributor(permissions.BasePermission):
-    """Check that the user is a project contributor."""
+class CanCreateIssueOrComment(permissions.BasePermission):
+    """Check if user can create comment."""
 
     def has_permission(self, request, view):
-        if 'ProjectViewSet' in str(view) and 'pk' in view.kwargs and request.user in \
-                get_object_or_404(Project, pk=view.kwargs['pk']).contributor_users.all():
-            return True
-        if 'ProjectViewSet' not in str(view) and 'project_pk' in view.kwargs and request.user in \
-                get_object_or_404(Project, pk=view.kwargs['project_pk']).contributor_users.all():
+        if request.user in get_object_or_404(Project, pk=view.kwargs['project_pk']).contributor_users.all():
             return True
         return False
 
@@ -24,14 +21,17 @@ class IsProjectManagerOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if view.action == 'create' and 'ProjectViewSet' in str(view):
-            return True
-        if view.action in ('update', 'partial_update', 'destroy') and 'ProjectViewSet' in str(view):
-            if get_object_or_404(Contributor, project_id=view.kwargs['pk'], user_id=request.user.id).role == 'manager':
-                return True
-        if view.action in ('create', 'update', 'partial_update', 'destroy') and 'ProjectViewSet' not in str(view):
-            if get_object_or_404(Contributor, project_id=view.kwargs['project_pk'], user_id=request.user.id).role == \
-                    'manager':
+        # Cannot use isinstance due to circular imports
+        if view.__str__() == 'ProjectViewSet':
+            if view.action == 'create':
+                return IsAuthenticated
+            if view.action in ('update', 'partial_update', 'destroy'):
+                if get_object_or_404(Contributor, project_id=view.kwargs['pk'],
+                                     user_id=request.user.id).role == 'manager':
+                    return True
+        if view.action in ('create', 'update', 'partial_update', 'destroy'):
+            if get_object_or_404(Contributor, project_id=view.kwargs['project_pk'],
+                                 user_id=request.user.id).role == 'manager':
                 return True
         return False
 

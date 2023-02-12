@@ -1,7 +1,8 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import ChoiceField
+from rest_framework.fields import ChoiceField, DateTimeField, empty
+from rest_framework.relations import PrimaryKeyRelatedField
 
 from softdesk.constants import CONTRIBUTOR_ROLE
 from softdesk.models import Comment, User
@@ -13,6 +14,8 @@ from softdesk.models.project import Project
 class ProjectSerializer(serializers.ModelSerializer):
     """Serialize Project model."""
 
+    author_user = PrimaryKeyRelatedField(required=False, read_only=True)
+
     class Meta:
         model = Project
         fields = ['id', 'title', 'description', 'project_type', 'author_user']
@@ -20,6 +23,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class IssueSerializer(serializers.ModelSerializer):
     """Serialize Issue model."""
+    author_user = PrimaryKeyRelatedField(required=False, read_only=True)
+    project = PrimaryKeyRelatedField(required=False, read_only=True)
+    created = DateTimeField(required=False, read_only=True)
+    modified = DateTimeField(required=False, read_only=True)
 
     class Meta:
         model = Issue
@@ -29,6 +36,10 @@ class IssueSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     """Serialize Comment model."""
+    author_user = PrimaryKeyRelatedField(required=False, read_only=True)
+    issue = PrimaryKeyRelatedField(required=False, read_only=True)
+    created = DateTimeField(required=False, read_only=True)
+    modified = DateTimeField(required=False, read_only=True)
 
     class Meta:
         model = Comment
@@ -38,6 +49,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class ContributorSerializer(serializers.ModelSerializer):
     """Serialize Contributor model."""
     role = ChoiceField(choices=CONTRIBUTOR_ROLE)
+    project = PrimaryKeyRelatedField(required=False, read_only=True)
 
     class Meta:
         model = Contributor
@@ -60,14 +72,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'password1', 'password2', 'username', 'first_name', 'last_name', 'email']
 
-    def create(self, data):
-
-        if data['password1'] == data['password2']:
-            data['password'] = data['password1']
-            data.pop('password1')
-            data.pop('password2')
-            user = super().create(data)
-            user.set_password(data['password'])
-            user.save()
-            return user
+    def validate(self, attrs):
+        """Return cleaned attrs if passwords match or validation error."""
+        if attrs['password1'] == attrs['password2']:
+            attrs['password'] = attrs['password1']
+            attrs.pop('password1')
+            attrs.pop('password2')
+            return attrs
         raise ValidationError('Passwords do not match. User not created.')
