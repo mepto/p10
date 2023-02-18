@@ -1,0 +1,4 @@
+[DESIGN]
+max-parents=15
+load-plugins=pylint_django
+

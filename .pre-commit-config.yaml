@@ -6,7 +6,7 @@ repos:
                 types: [ python ]
                 exclude: migrations|models/__init__.py
     -   repo: https://github.com/pycqa/isort
-        rev: 5.10.1
+        rev: 5.12.0
         hooks:
             -   id: isort
                 name: isort (python)
@@ -17,3 +17,20 @@ repos:
             -   id: flake8
                 types: [ python ]
                 exclude: migrations
+    -   repo: https://github.com/econchick/interrogate
+        rev: 1.5.0
+        hooks:
+            -   id: interrogate
+                args: [ --vv, -i, --fail-under=80 ]
+    -   repo: local
+        hooks:
+            -   id: pylint
+                name: pylint
+                entry: pylint
+                language: system
+                types: [ python ]
+                args:
+                    [
+                        "-rn", # Only display messages
+                        "-sn", # Don't display the score
+                    ]
