@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -74,8 +75,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         """Return cleaned attrs if passwords match or validation error."""
+        attrs = super().validate(attrs)
         if attrs['password1'] == attrs['password2']:
-            attrs['password'] = attrs['password1']
+            attrs['password'] = make_password(attrs['password1'])
             attrs.pop('password1')
             attrs.pop('password2')
             return attrs
