@@ -21,13 +21,7 @@ class CommentViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         """Add creation date and user to new issue."""
-        serializer.validated_data['author_user'] = self.request.user
-        serializer.validated_data['created'] = now()
-        serializer.validated_data['modified'] = now()
-        serializer.validated_data['issue_id'] = self.kwargs['issue_pk']
-        serializer.save()
-
-    def perform_update(self, serializer):
-        """Change modified field on item update."""
-        serializer.validated_data['modified'] = now()
-        serializer.save()
+        serializer.save(
+            author_user=self.request.user,
+            issue_id=self.kwargs['issue_pk']
+        )

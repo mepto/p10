@@ -14,8 +14,9 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
 
     def perform_create(self, serializer):
         """Add information to user creation."""
-        serializer.validated_data['date_joined'] = now()
-        serializer.validated_data['is_staff'] = False
-        serializer.validated_data['is_superuser'] = False
-        serializer.validated_data['is_active'] = True
-        serializer.save()
+        serializer.save(
+            date_joined=now(),
+            is_staff=False,
+            is_superuser=False,
+            is_active=True
+        )

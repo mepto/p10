@@ -23,7 +23,11 @@ class IsProjectManagerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         # Cannot use isinstance due to circular imports
-        if view.__str__() == 'ProjectViewSet':
+        # pylint: disable=import-outside-toplevel
+        from softdesk.views.project import ProjectViewSet
+
+        # pylint: enable=import-outside-toplevel
+        if isinstance(view, ProjectViewSet):
             if view.action == 'create':
                 return IsAuthenticated
             if view.action in ('update', 'partial_update', 'destroy'):

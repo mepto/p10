@@ -21,15 +21,14 @@ class IssueViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         """Add creation date and user to new issue."""
-        serializer.validated_data['author_user'] = self.request.user
-        serializer.validated_data['created'] = now()
-        serializer.validated_data['modified'] = now()
-        serializer.validated_data['project_id'] = self.kwargs['project_pk']
         if 'assignee_user' not in serializer.validated_data:
-            serializer.validated_data['assignee_user'] = self.request.user
-        serializer.save()
-
-    def perform_update(self, serializer):
-        """Change modified field on item update."""
-        serializer.validated_data['modified'] = now()
-        serializer.save()
+            serializer.save(
+                author_user=self.request.user,
+                project_id=self.kwargs['project_pk'],
+                assignee_user=self.request.user
+            )
+        else:
+            serializer.save(
+                author_user=self.request.user,
+                project_id=self.kwargs['project_pk']
+            )

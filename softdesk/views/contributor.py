@@ -24,5 +24,4 @@ class ContributorViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         """Add project id to serializer data."""
-        serializer.validated_data['project_id'] = self.kwargs['project_pk']
-        serializer.save()
+        serializer.save(project_id=self.kwargs['project_pk'])

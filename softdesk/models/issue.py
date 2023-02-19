@@ -17,6 +17,7 @@ class Issue(models.Model):
     priority = models.CharField(choices=ISSUE_PRIORITY, max_length=10)
     status = models.CharField(choices=ISSUE_STATUS, max_length=20)
     tag = models.CharField(choices=ISSUE_TYPE, max_length=20)
-    project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='issue_project')
-    created = models.DateTimeField()
-    modified = models.DateTimeField()
+    project = models.ForeignKey(to=Project, on_delete=models.CASCADE,
+                                related_name='issue_project')
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)

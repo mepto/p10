@@ -19,8 +19,7 @@ class ProjectViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         """Populate author_user information before save."""
-        serializer.validated_data['author_user'] = self.request.user
-        project = serializer.save()
+        project = serializer.save(author_user=self.request.user)
         Contributor.objects.create(role=MANAGER,
                                    project_id=project.id,
                                    user_id=int(self.request.user.id))

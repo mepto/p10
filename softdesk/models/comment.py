@@ -10,5 +10,5 @@ class Comment(models.Model):
     description = models.TextField()
     author_user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE)
-    created = models.DateTimeField()
-    modified = models.DateTimeField()
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
