@@ -1,9 +1,7 @@
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from softdesk.constants import CONTRIBUTOR_ROLE, MANAGER
+from softdesk.constants import MANAGER
 from softdesk.models import Project
 from softdesk.models.contributor import Contributor
 from softdesk.permissions import IsProjectManagerOrReadOnly

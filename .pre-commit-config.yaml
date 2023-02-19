@@ -26,6 +26,7 @@ repos:
         hooks:
             -   id: interrogate
                 args: [ -vv, -i, --fail-under=80 ]
+                exclude: migrations
     -   repo: local
         hooks:
             -   id: pylint

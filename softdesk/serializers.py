@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import ChoiceField, DateTimeField, empty
+from rest_framework.fields import ChoiceField, DateTimeField
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from softdesk.constants import CONTRIBUTOR_ROLE
@@ -31,8 +31,8 @@ class IssueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ['id', 'title', 'description', 'assignee_user', 'author_user', 'priority', 'status', 'tag',
-                  'project', 'created', 'modified']
+        fields = ['id', 'title', 'description', 'assignee_user', 'author_user', 'priority',
+                  'status', 'tag', 'project', 'created', 'modified']
 
 
 class CommentSerializer(serializers.ModelSerializer):

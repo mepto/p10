@@ -10,7 +10,8 @@ class CanCreateIssueOrComment(permissions.BasePermission):
     """Check if user can create comment."""
 
     def has_permission(self, request, view):
-        if request.user in get_object_or_404(Project, pk=view.kwargs['project_pk']).contributor_users.all():
+        if request.user in get_object_or_404(Project,
+                                             pk=view.kwargs['project_pk']).contributor_users.all():
             return True
         return False
 
