@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import json
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 
@@ -30,12 +31,14 @@ try:
     SECRET_KEY = SECRETS['SECRET_KEY']
     DB_PWD = SECRETS['DB_PWD']
 except FileNotFoundError:
-    print('DJANGO SECRET FILE ERROR: Missing .softdesk.secret file! \nAdd a ".softdesk.secret" file with a Django '
-          'secret key next to settings.py file. See readme.md for more information.')
-    quit()
+    print("""DJANGO SECRET FILE ERROR: Missing .softdesk.secret file! 
+Add a ".softdesk.secret" file with a Django secret key next to settings.py file. 
+See readme.md for more information.""")
+    sys.exit(0)
 except KeyError:
-    print('DJANGO SECRET FILE ERROR: Missing key in secreet file! \nThe .softdesk.secret file must contain a '
-          'SECRET_KEY for Django and a DB_PWD for the database.')
+    print("""DJANGO SECRET FILE ERROR: Missing key in secreet file!
+The .softdesk.secret file must contain a SECRET_KEY for Django and a DB_PWD for the database.""")
+    sys.exit(0)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

@@ -1,4 +1,10 @@
 [DESIGN]
 max-parents=15
-load-plugins=pylint_django
 
+[MAIN]
+load-plugins=pylint_django
+django-settings-module=main.settings
+ignore=softdesk.migrations
+
+[MESSAGES CONTROL]
+disable=C0114
