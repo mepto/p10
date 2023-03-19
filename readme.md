@@ -109,3 +109,9 @@ PEP8 are properly respected. After requirements are set, run
 You can also run the checks separate from commit by running
 
 `pre-commit run --all-files`
+
+
+## Postman documentation
+
+The documentation for API endpoints is available on Postman at 
+https://documenter.getpostman.com/view/12049100/2s93JzMgbq
