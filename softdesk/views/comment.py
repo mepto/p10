@@ -16,7 +16,7 @@ class CommentViewSet(ModelViewSet):
         """Filter queryset with specific project."""
         queryset = super().get_queryset()
         if 'issue_pk' in self.kwargs:
-            queryset = queryset.filter(project_id=self.kwargs['issue_pk'])
+            queryset = queryset.filter(issue_id=self.kwargs['issue_pk'])
         return queryset
 
     def perform_create(self, serializer):
